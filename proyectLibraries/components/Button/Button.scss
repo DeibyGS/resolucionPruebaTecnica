@@ -1,0 +1,26 @@
+@use '../../src/styles.scss' as *;
+
+.containerBtnFilter{
+    width: 100%;
+    height: auto;
+     
+    &__btn{
+        border: none;
+        background-color: $color-secundary;
+        color: white;
+        padding: 12px 22px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;       
+        transform: translateX(-50%);
+        cursor: pointer;
+       
+        &-img{
+            filter: invert(1);
+           
+        }
+    }
+}
