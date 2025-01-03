@@ -2,7 +2,6 @@ import "../styles/styles.css";
 import Beers from "../data/data.json";
 import productTemplate from "/template/productTemplate.hbs?raw";
 import { btn } from "../components/Button/Button";
-import { log } from "handlebars";
 
 // Funcion para Renderizar productos en el contenedor
 const renderProducts = (products) => {
@@ -135,23 +134,26 @@ const contentModal = () => {
   disableBtnClear();
 
   //FUNCION QUE DETECTA SI ALGUN CHECKBOK ESTA MARCADO Y FILTRA LAS COINCIDENCIAS DE LA DATA E INSERTA DENTRO DEL BTN FILTRAR LA CANTIDAD DE BEERS COINCIDEN
+
   const beerFiltered = () => {
     const checkedInputs = Array.from(
       document.querySelectorAll(".containerFilterBeers__form input:checked")
     );
-
     const valueCheckboxes = checkedInputs.map((input) => input.value);
-    console.log(valueCheckboxes);
+
+    //Aca guardo el estado de los filtros en el localStorage
+    localStorage.setItem("selectedFilters", JSON.stringify(valueCheckboxes));
 
     const filterMap = {
       rubia: 1,
       brunette: 2,
       red: 3,
     };
-    const selectedFilterIds = valueCheckboxes.map((value) => filterMap[value]);
 
     const filteredBeers = Beers.products.filter((beer) =>
-      selectedFilterIds.includes(beer.filterId)
+      valueCheckboxes.includes(
+        Object.keys(filterMap).find((key) => filterMap[key] === beer.filterId)
+      )
     );
     const beersQuantity = filteredBeers.length;
 
@@ -170,27 +172,38 @@ const contentModal = () => {
     return filteredBeers;
   };
 
-  const loadLocalStorage = () => {
-    const checkedInputs = Array.from(
-      document.querySelectorAll(".containerFilterBeers__form input:checked")
-    );
-    const valueCheckboxes = checkedInputs.map((input) => input.value);
-    localStorage.setItem("selectedFilters", JSON.stringify(valueCheckboxes));
-  };
   const printFilterdBeers = () => {
     const btnModalSubmit = document.querySelector(".btnModalSubmit");
     btnModalSubmit.addEventListener("click", () => {
-      loadLocalStorage();
-      const filterBeers = beerFiltered();
-      console.log(filterBeers);
+      const loadFiltersFromLocalStorage = () => {
+        const selectedFilters = JSON.parse(
+          localStorage.getItem("selectedFilters")
+        );
 
-      if (filterBeers.length === 0) {
-        renderProducts(Beers.products);
-      } else {
-        renderProducts(filterBeers);
-      }
-      const containerModal = document.querySelector("#containerModal");
-      containerModal.classList.remove("containerModal-active");
+        if (selectedFilters && selectedFilters.length > 0) {
+          // Reaplicar los filtros seleccionados
+          const inputs = document.querySelectorAll(
+            ".containerFilterBeers__form input"
+          );
+          inputs.forEach((input) => {
+            if (selectedFilters.includes(input.value)) {
+              input.checked = true;
+            }
+          });
+
+          // Mostrar productos filtrados según el estado almacenado
+          const filteredBeers = beerFiltered();
+
+          if (filteredBeers.length === 0) {
+            renderProducts(Beers.products);
+          } else {
+            renderProducts(filteredBeers);
+          }
+        } else {
+          // Si no hay filtros guardados, mostrar todos los productos
+          renderProducts(Beers.products);
+        }
+      };
     });
   };
 
@@ -198,40 +211,4 @@ const contentModal = () => {
 };
 contentModal();
 
-document.addEventListener("DOMContentLoaded", () => {
-  const seletedCheckbox = JSON.parse(
-    localStorage.getItem("selectedFilters") || "[]"
-  );
-  const updateClearButtonState = () => {
-    const inputs = document.querySelectorAll(
-      ".containerFilterBeers__form input"
-    );
-    const checkedInputs = Array.from(inputs).some((input) => input.checked);
-    const btnClear = document.querySelector(".btnModalReset");
-    btnClear.disabled = !checkedInputs;
-  };
-
-  if (seletedCheckbox.length > 0) {
-    const filterMap = {
-      rubia: 1,
-      brunette: 2,
-      red: 3,
-    };
-    const selectValues = seletedCheckbox.map((value) => filterMap[value]);
-
-    const filteredBeers = Beers.products.filter((beer) =>
-      selectValues.includes(beer.filterId)
-    );
-
-    renderProducts(filteredBeers);
-    seletedCheckbox.forEach((filterValue) => {
-      const checkbox = document.querySelector(`input[value="${filterValue}"]`);
-      if (checkbox) {
-        checkbox.checked = true;
-      }
-    });
-  } else {
-    renderProducts(Beers.products);
-  }
-  updateClearButtonState();
-});
+document.addEventListener("DOMContentLoaded", loadFiltersFromLocalStorage);

@@ -118,6 +118,13 @@
   cursor: pointer;
   justify-content: center;
 }
+.containerFilterBeers__modalBtn .btnModalSubmit .containerQuantityofBeers {
+  font-size: 0.9rem;
+  padding: 2px 8px;
+  background-color: white;
+  color: rgb(17, 17, 217);
+  border-radius: 8px;
+}
 .containerFilterBeers__modalBtn .btnModalReset, .containerFilterBeers__modalBtn .btnModalSubmit {
   min-width: 200px;
   max-width: 350px;

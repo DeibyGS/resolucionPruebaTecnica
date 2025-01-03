@@ -135,6 +135,15 @@
         .btnModalSubmit{
             @include btn-styles;
             justify-content:center;
+
+            .containerQuantityofBeers{
+                font-size: 0.9rem;
+                padding: 2px 8px;
+                background-color: white;
+                color: $color-secundary;
+                border-radius: 8px;
+
+            }
         }
 
         .btnModalReset, .btnModalSubmit{
