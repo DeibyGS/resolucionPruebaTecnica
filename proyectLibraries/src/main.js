@@ -141,7 +141,6 @@ const contentModal = () => {
     );
 
     const valueCheckboxes = checkedInputs.map((input) => input.value);
-    console.log(valueCheckboxes);
 
     const filterMap = {
       rubia: 1,
@@ -182,7 +181,6 @@ const contentModal = () => {
     btnModalSubmit.addEventListener("click", () => {
       loadLocalStorage();
       const filterBeers = beerFiltered();
-      console.log(filterBeers);
 
       if (filterBeers.length === 0) {
         renderProducts(Beers.products);
