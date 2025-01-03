@@ -1,0 +1,31 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+
+
+.containerBtnFilter{
+    width: 100%;
+    height: auto;
+     
+    
+      
+      &__btn {
+        @include btn-styles;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 22px;
+
+      
+        &-img {
+          filter: invert(1);
+        }
+      }
+      
+      &__btn-no-position {
+        @include btn-styles;
+      }
+      
+
+  
+}

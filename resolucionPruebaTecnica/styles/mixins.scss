@@ -1,0 +1,9 @@
+@mixin btn-styles {
+    border: none;
+    background-color: $color-secundary;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+  }
