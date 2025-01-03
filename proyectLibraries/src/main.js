@@ -122,7 +122,7 @@ const contentModal = () => {
     cleanerBtn.addEventListener("click", () => {
       const checkboxes = document.querySelectorAll("input[type='checkbox']");
       checkboxes.forEach((checkbox) => (checkbox.checked = false));
-      disableBtnFuction(); // Actualizar el estado del botón Limpiar
+      disableBtnFuction();
       const containerQuantityofBeers = document.querySelector(
         "#containerQuantityofBeers"
       );
@@ -228,6 +228,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const checkbox = document.querySelector(`input[value="${filterValue}"]`);
       if (checkbox) {
         checkbox.checked = true;
+        const beersQuantity = filteredBeers.length;
+
+        const containerQuantityofBeers = document.querySelector(
+          "#containerQuantityofBeers"
+        );
+
+        if (beersQuantity > 0) {
+          containerQuantityofBeers.textContent = beersQuantity;
+          containerQuantityofBeers.classList.add("containerQuantityofBeers");
+        } else {
+          containerQuantityofBeers.textContent = "";
+          containerQuantityofBeers.classList.remove("containerQuantityofBeers");
+        }
       }
     });
   } else {
